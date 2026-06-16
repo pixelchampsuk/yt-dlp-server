@@ -1,2 +1,4 @@
-﻿flask
+flask
+flask-cors
 yt-dlp
+gunicorn
