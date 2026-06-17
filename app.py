@@ -1,5 +1,5 @@
 import subprocess, tempfile, os, glob, logging
-from flask import Flask, request, send_file, jsonify, after_this_request
+from flask import Flask, request, send_file, jsonify
 
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
@@ -12,12 +12,14 @@ def add_cors(response):
 
 app.after_request(add_cors)
 
-@app.route("/", methods=["POST", "OPTIONS"])
-def extract():
+def do_extract():
     if request.method == "OPTIONS":
         return jsonify({}), 200
 
     data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON body"}), 400
+    
     url = data.get("url")
     app.logger.info(f"Received request for URL: {url}")
 
@@ -49,5 +51,5 @@ def extract():
 
         return send_file(files[0], mimetype="audio/mpeg", as_attachment=False)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+# Handle all common endpoint paths Lovable might try
+@app.route("/", methods=
